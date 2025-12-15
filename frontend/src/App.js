@@ -8,13 +8,17 @@ import CreateBlog from "./pages/CreateBlog";
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/create" element={<CreateBlog />} />
-      </Routes>
+      {/* 🌿 GLOBAL THEME WRAPPER */}
+      <div className="min-h-screen bg-luxBg text-luxText">
+        <Navbar />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/create" element={<CreateBlog />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
