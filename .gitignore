@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ignore node modules
 node_modules/
 
@@ -10,3 +11,15 @@ Thumbs.db
 
 # Log files
 *.log
+=======
+# node
+node_modules/
+.env
+
+# build
+dist/
+build/
+
+# system
+.DS_Store
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
