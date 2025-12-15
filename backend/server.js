@@ -27,7 +27,11 @@ async function startServer() {
     console.log("✅ Mock blogs inserted");
   }
 
+<<<<<<< HEAD
   // Start server
+=======
+  // 3️⃣ Start server
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
   app.listen(5050, () => {
     console.log("🚀 Server running on port 5050");
   });

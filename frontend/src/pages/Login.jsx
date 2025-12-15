@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -59,17 +60,33 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+=======
+
+  const submit = async (e) => {
+    e.preventDefault();
+    await fetch("http://localhost:5050/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    alert("Welcome back ✨");
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
   };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-luxBg animate-fadeIn">
 
+<<<<<<< HEAD
       {/* LEFT */}
+=======
+      {/* LEFT: TEXT */}
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
       <div className="hidden md:flex flex-col justify-center px-20">
         <h1 className="text-5xl font-bold text-luxHeading leading-tight">
           Welcome back.
         </h1>
         <p className="mt-4 text-luxMuted text-lg max-w-md">
+<<<<<<< HEAD
           Continue where you left off. Your words are waiting.
         </p>
       </div>
@@ -80,6 +97,19 @@ export default function Login() {
           onSubmit={submit}
           autoComplete="off"
           className="w-full max-w-md bg-luxSurface border border-luxBorder rounded-xl p-10 space-y-6 shadow-xl shadow-black/40"
+=======
+          Continue where you left off.  
+          Your words are waiting.
+        </p>
+      </div>
+
+      {/* RIGHT: FORM */}
+      <div className="flex items-center justify-center">
+        <form
+          onSubmit={submit}
+          className="w-full max-w-md bg-luxSurface border border-luxBorder 
+                     rounded-xl p-10 space-y-6 shadow-xl shadow-black/40"
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
         >
           <h2 className="text-2xl font-semibold text-luxHeading">
             Log in
@@ -87,6 +117,7 @@ export default function Login() {
 
           <input
             type="email"
+<<<<<<< HEAD
             name="email"
             placeholder="Email"
             autoComplete="off"
@@ -96,6 +127,13 @@ export default function Login() {
             required
             value={form.email}
             className="w-full bg-transparent border border-luxBorder p-3 rounded-md outline-none focus:border-luxAccent transition"
+=======
+            placeholder="Email"
+            required
+            className="w-full bg-transparent border border-luxBorder 
+                       p-3 rounded-md outline-none 
+                       focus:border-luxAccent transition"
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
             onChange={(e) =>
               setForm({ ...form, email: e.target.value })
             }
@@ -103,17 +141,26 @@ export default function Login() {
 
           <input
             type="password"
+<<<<<<< HEAD
             name="password"
             placeholder="Password"
             autoComplete="new-password"
             required
             value={form.password}
             className="w-full bg-transparent border border-luxBorder p-3 rounded-md outline-none focus:border-luxAccent transition"
+=======
+            placeholder="Password"
+            required
+            className="w-full bg-transparent border border-luxBorder 
+                       p-3 rounded-md outline-none 
+                       focus:border-luxAccent transition"
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
             onChange={(e) =>
               setForm({ ...form, password: e.target.value })
             }
           />
 
+<<<<<<< HEAD
           {/* ERROR MESSAGE */}
           {error && (
             <p className="text-red-500 text-sm">
@@ -131,6 +178,15 @@ export default function Login() {
             }`}
           >
             {loading ? "Logging in..." : "Login"}
+=======
+          <button
+            type="submit"
+            className="w-full py-3 bg-luxAccent text-luxBg 
+                       rounded-md font-medium 
+                       hover:bg-luxAccentHover transition"
+          >
+            Login
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
           </button>
         </form>
       </div>

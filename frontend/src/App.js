@@ -23,6 +23,7 @@ export default function App() {
         <Navbar />
 
         <Routes>
+<<<<<<< HEAD
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -78,6 +79,13 @@ export default function App() {
           />
         </Routes>
 
+=======
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/create" element={<CreateBlog />} />
+        </Routes>
+>>>>>>> c092f4b (✨ Major UI redesign: elegant dark theme, Tailwind, animations)
       </div>
     </BrowserRouter>
   );
