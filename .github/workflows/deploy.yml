@@ -1,0 +1,40 @@
+name: Deploy BLOG-WEBSITE
+
+on:
+  push:
+    branches:
+      - main  # jab bhi main branch me push ho
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout code
+      - uses: actions/checkout@v3
+
+      # 2️⃣ Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3️⃣ Install backend dependencies
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          npm install
+
+      # 4️⃣ Install frontend dependencies & build
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      # 5️⃣ Deploy to Render
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Add your API key in repo secrets
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-XXXXXX -H "Authorization: Bearer $RENDER_API_KEY"
