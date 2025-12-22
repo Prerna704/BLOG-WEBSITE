@@ -33,9 +33,15 @@ export default function Navbar() {
 
         <div className="flex gap-10 text-sm transition-all items-center relative">
           <Link to="/" className={linkStyle("/")}>Home</Link>
-          <Link to="/create" className={linkStyle("/create")}>Write</Link>
 
-          {/* Show Login & Sign Up only if not logged in */}
+          {/* ✅ Write only when logged in */}
+          {user && (
+            <Link to="/create" className={linkStyle("/create")}>
+              Write
+            </Link>
+          )}
+
+          {/* Guest links */}
           {!user && (
             <>
               <Link to="/login" className={linkStyle("/login")}>Login</Link>
@@ -48,7 +54,7 @@ export default function Navbar() {
             </>
           )}
 
-          {/* Show Profile button if logged in */}
+          {/* Logged-in dropdown */}
           {user && (
             <div className="relative">
               <button
@@ -60,8 +66,12 @@ export default function Navbar() {
 
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-luxSurface border border-luxBorder rounded-lg shadow-lg p-3 flex flex-col gap-2 z-50">
-                  <span className="text-sm text-luxHeading font-semibold">{user.name}</span>
-                  <span className="text-xs text-luxMuted">{user.email}</span>
+                  <span className="text-sm text-luxHeading font-semibold">
+                    {user.name}
+                  </span>
+                  <span className="text-xs text-luxMuted">
+                    {user.email}
+                  </span>
 
                   <Link
                     to="/update-password"
