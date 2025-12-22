@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // Redirect if already logged in
@@ -15,6 +16,24 @@ export default function Login() {
 
   const submit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // 🔐 EMAIL VALIDATION
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const allowedDomains = ["gmail.com", "outlook.com", "yahoo.com"];
+
+    const emailDomain = form.email.split("@")[1];
+
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    if (!allowedDomains.includes(emailDomain)) {
+      setError("Please use a valid email provider (gmail, outlook, yahoo)");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -27,16 +46,14 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        // Store user info in localStorage
         localStorage.setItem("user", JSON.stringify(data));
-        alert("Welcome back ✨");
         navigate("/");
       } else {
-        alert(data.message || "Login failed. Check credentials!");
+        setError(data.message || "Login failed. Check credentials!");
       }
     } catch (err) {
       console.error("Login error:", err);
-      alert("Network error! Is your backend running?");
+      setError("Network error! Is your backend running?");
     } finally {
       setLoading(false);
     }
@@ -44,7 +61,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-luxBg animate-fadeIn">
-      {/* LEFT: WELCOME TEXT */}
+
+      {/* LEFT */}
       <div className="hidden md:flex flex-col justify-center px-20">
         <h1 className="text-5xl font-bold text-luxHeading leading-tight">
           Welcome back.
@@ -54,31 +72,52 @@ export default function Login() {
         </p>
       </div>
 
-      {/* RIGHT: LOGIN FORM */}
+      {/* RIGHT */}
       <div className="flex items-center justify-center">
         <form
           onSubmit={submit}
+          autoComplete="off"
           className="w-full max-w-md bg-luxSurface border border-luxBorder rounded-xl p-10 space-y-6 shadow-xl shadow-black/40"
         >
-          <h2 className="text-2xl font-semibold text-luxHeading">Log in</h2>
+          <h2 className="text-2xl font-semibold text-luxHeading">
+            Log in
+          </h2>
 
           <input
             type="email"
+            name="email"
             placeholder="Email"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck="false"
             required
-            className="w-full bg-transparent border border-luxBorder p-3 rounded-md outline-none focus:border-luxAccent transition"
             value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="w-full bg-transparent border border-luxBorder p-3 rounded-md outline-none focus:border-luxAccent transition"
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
           />
 
           <input
             type="password"
+            name="password"
             placeholder="Password"
+            autoComplete="new-password"
             required
-            className="w-full bg-transparent border border-luxBorder p-3 rounded-md outline-none focus:border-luxAccent transition"
             value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            className="w-full bg-transparent border border-luxBorder p-3 rounded-md outline-none focus:border-luxAccent transition"
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
           />
+
+          {/* ERROR MESSAGE */}
+          {error && (
+            <p className="text-red-500 text-sm">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
