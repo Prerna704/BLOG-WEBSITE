@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function BlogModal({ blog, onClose }) {
   const [showHighlight, setShowHighlight] = useState(false);
   const [highlightPos, setHighlightPos] = useState({ x: 0, y: 0 });
   const [rangeRef, setRangeRef] = useState(null);
+
+  // Cleanup on unmount (IMPORTANT)
+  useEffect(() => {
+    return () => {
+      window.getSelection()?.removeAllRanges();
+      setShowHighlight(false);
+      setRangeRef(null);
+    };
+  }, []);
 
   if (!blog) return null;
 
@@ -30,7 +39,7 @@ export default function BlogModal({ blog, onClose }) {
     if (!rangeRef) return;
 
     const span = document.createElement("span");
-    span.style.backgroundColor = "#fde68a"; // visible highlight
+    span.style.backgroundColor = "#fde68a";
     span.style.color = "#1f2937";
     span.style.padding = "2px 4px";
     span.style.borderRadius = "4px";
@@ -39,19 +48,29 @@ export default function BlogModal({ blog, onClose }) {
     rangeRef.insertNode(span);
 
     setShowHighlight(false);
+    setRangeRef(null);
     window.getSelection().removeAllRanges();
+  };
+
+  const handleClose = () => {
+    window.getSelection()?.removeAllRanges();
+    setShowHighlight(false);
+    setRangeRef(null);
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
-      <div className="
-        bg-luxSurface
-        max-w-3xl w-full
-        max-h-[90vh] overflow-y-auto
-        rounded-2xl
-        p-6
-        relative
-      ">
+      <div
+        className="
+          bg-luxSurface
+          max-w-3xl w-full
+          max-h-[90vh] overflow-y-auto
+          rounded-2xl
+          p-6
+          relative
+        "
+      >
         {/* IMAGE + CLOSE */}
         <div className="relative h-48 w-full overflow-hidden rounded-xl mb-6">
           <img
@@ -61,7 +80,7 @@ export default function BlogModal({ blog, onClose }) {
           />
 
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="
               absolute top-3 right-3
               bg-black/60 text-white
@@ -114,17 +133,3 @@ export default function BlogModal({ blog, onClose }) {
     </div>
   );
 }
-
-
-
-// Why THIS works (important for viva/interview)
-
-// We wrap the selected text
-
-// No browser hacks
-
-// No deprecated APIs
-
-// React-safe DOM manipulation
-
-// This is how Notion, Kindle Web, Medium started

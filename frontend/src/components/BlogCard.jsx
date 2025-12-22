@@ -1,16 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function BlogCard({ blog, onRead }) {
   const [saved, setSaved] = useState(false);
   const [toast, setToast] = useState("");
+  const toastTimer = useRef(null);
 
-  // check saved state on load
+  // Check saved state on load
   useEffect(() => {
+    if (!blog?._id) return;
+
     const savedBlogs = JSON.parse(localStorage.getItem("savedBlogs")) || [];
     setSaved(savedBlogs.includes(blog._id));
-  }, [blog._id]);
 
-  const toggleSave = () => {
+    return () => {
+      if (toastTimer.current) {
+        clearTimeout(toastTimer.current);
+      }
+    };
+  }, [blog?._id]);
+
+  const showToast = (message) => {
+    setToast(message);
+
+    if (toastTimer.current) {
+      clearTimeout(toastTimer.current);
+    }
+
+    toastTimer.current = setTimeout(() => {
+      setToast("");
+    }, 2000);
+  };
+
+  const toggleSave = (e) => {
+    e.stopPropagation(); // IMPORTANT: prevent opening modal
+
+    if (!blog?._id) return;
+
     const savedBlogs = JSON.parse(localStorage.getItem("savedBlogs")) || [];
 
     if (saved) {
@@ -19,16 +44,13 @@ export default function BlogCard({ blog, onRead }) {
       setSaved(false);
       showToast("Removed from saved");
     } else {
-      savedBlogs.push(blog._id);
-      localStorage.setItem("savedBlogs", JSON.stringify(savedBlogs));
+      localStorage.setItem(
+        "savedBlogs",
+        JSON.stringify([...savedBlogs, blog._id])
+      );
       setSaved(true);
       showToast("Saved ✓");
     }
-  };
-
-  const showToast = (message) => {
-    setToast(message);
-    setTimeout(() => setToast(""), 2000);
   };
 
   return (

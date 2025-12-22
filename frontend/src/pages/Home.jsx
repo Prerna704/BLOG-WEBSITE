@@ -7,11 +7,19 @@ export default function Home() {
   const [blogs, setBlogs] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [showTopics, setShowTopics] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:5050/api/blogs")
-      .then(res => res.json())
-      .then(data => setBlogs(data));
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch blogs");
+        return res.json();
+      })
+      .then(data => setBlogs(data))
+      .catch(err => {
+        console.error(err);
+        setError("Could not load blogs");
+      });
   }, []);
 
   const scrollToBlogs = () => {
@@ -42,24 +50,14 @@ export default function Home() {
           <div className="mt-10 flex items-center gap-6">
             <button
               onClick={scrollToBlogs}
-              className="
-                text-luxAccent
-                font-medium
-                hover:underline
-                transition
-              "
+              className="text-luxAccent font-medium hover:underline transition"
             >
               Explore stories
             </button>
 
             <button
               onClick={() => setShowTopics(true)}
-              className="
-                text-luxMuted
-                font-medium
-                hover:text-luxAccent
-                transition
-              "
+              className="text-luxMuted font-medium hover:text-luxAccent transition"
             >
               Explore topics
             </button>
@@ -78,26 +76,36 @@ export default function Home() {
         id="blogs"
         className="max-w-7xl mx-auto px-10 pb-28 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
       >
+        {error && (
+          <p className="col-span-full text-center text-luxMuted">
+            {error}
+          </p>
+        )}
+
         {blogs.map((blog) => (
           <BlogCard
-            key={blog._id}
+            key={blog._id || blog.title}
             blog={blog}
-            onRead={setSelectedBlog}
+            onRead={(b) => setSelectedBlog(b)}
           />
         ))}
       </section>
 
-      {/* BLOG MODAL */}
-      <BlogModal
-        blog={selectedBlog}
-        onClose={() => setSelectedBlog(null)}
-      />
+      {/* BLOG MODAL — render ONLY when needed */}
+      {selectedBlog && (
+        <BlogModal
+          blog={selectedBlog}
+          onClose={() => setSelectedBlog(null)}
+        />
+      )}
 
-      {/* EXPLORE TOPICS MODAL */}
-      <ExploreTopicsModal
-        open={showTopics}
-        onClose={() => setShowTopics(false)}
-      />
+      {/* EXPLORE TOPICS MODAL — render ONLY when open */}
+      {showTopics && (
+        <ExploreTopicsModal
+          open={showTopics}
+          onClose={() => setShowTopics(false)}
+        />
+      )}
 
     </div>
   );

@@ -1,4 +1,16 @@
+import { useEffect } from "react";
+
 export default function ExploreTopicsModal({ open, onClose }) {
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   if (!open) return null;
 
   return (
