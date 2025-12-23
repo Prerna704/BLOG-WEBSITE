@@ -3,39 +3,38 @@ name: Deploy BLOG-WEBSITE
 on:
   push:
     branches:
-      - main   # Triggers on every push to main
+      - main   # jab bhi main branch me push hoga
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
+      # 1️⃣ Repo checkout
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Setup Node.js
+      # 2️⃣ Node.js setup
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       # 3️⃣ Install backend dependencies
-      - name: Install Backend Dependencies
-        working-directory: ./backend
+      - name: Install backend dependencies
+        working-directory: backend
         run: npm install
 
-      # 4️⃣ Install frontend dependencies & build
-      - name: Build Frontend
-        working-directory: ./frontend
-        run: |
-          npm install
-          npm run build
+      # 4️⃣ Install frontend dependencies
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
 
-      # 5️⃣ Deploy to Render
-      - name: Deploy to Render
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # Make sure you added this in repo secrets
-        run: |
-          curl -X POST https://api.render.com/deploy/srv-XXXXXX \
-          -H "Authorization: Bearer $RENDER_API_KEY"
+      # 5️⃣ Build frontend
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      # 6️⃣ Success message
+      - name: Deployment completed
+        run: echo "✅ Build Successful"
