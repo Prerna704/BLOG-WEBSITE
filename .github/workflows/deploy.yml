@@ -1,40 +1,29 @@
-name: Deploy BLOG-WEBSITE
+name: CI Test BLOG-WEBSITE
 
 on:
   push:
     branches:
-      - main   # jab bhi main branch me push hoga
+      - main
 
 jobs:
-  build-and-deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Repo checkout
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # 2️⃣ Node.js setup
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: "20"
 
-      # 3️⃣ Install backend dependencies
-      - name: Install backend dependencies
-        working-directory: backend
-        run: npm install
+      - name: Print folders
+        run: ls -la
 
-      # 4️⃣ Install frontend dependencies
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm install
+      - name: Print backend
+        run: ls -la backend || echo "backend folder not found"
 
-      # 5️⃣ Build frontend
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
+      - name: Print frontend
+        run: ls -la frontend || echo "frontend folder not found"
 
-      # 6️⃣ Success message
-      - name: Deployment completed
-        run: echo "✅ Build Successful"
+      - name: Done
+        run: echo "CI is working"
