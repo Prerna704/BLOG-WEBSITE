@@ -1,4 +1,4 @@
-name: CI Test BLOG-WEBSITE
+name: Deploy BLOG-WEBSITE
 
 on:
   push:
@@ -6,24 +6,35 @@ on:
       - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      # 1️⃣ Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      # 2️⃣ Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: "20"
 
-      - name: Print folders
-        run: ls -la
+      # 3️⃣ Backend install
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
 
-      - name: Print backend
-        run: ls -la backend || echo "backend folder not found"
+      # 4️⃣ Frontend install
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
 
-      - name: Print frontend
-        run: ls -la frontend || echo "frontend folder not found"
+      # 5️⃣ Frontend build
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
 
+      # 6️⃣ Success
       - name: Done
-        run: echo "CI is working"
+        run: echo "✅ CI Pipeline Successful"
