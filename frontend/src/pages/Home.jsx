@@ -9,7 +9,7 @@ export default function Home() {
   const [blogs, setBlogs] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [showTopics, setShowTopics] = useState(false);
-  // const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   // Fetch all blogs

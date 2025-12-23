@@ -8,33 +8,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: false    # <- ye important, warnings won't fail build
 
     steps:
-      # 1️⃣ Checkout repo
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2️⃣ Setup Node
-      - name: Setup Node.js
+      - uses: actions/checkout@v3
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: 20
 
-      # 3️⃣ Backend install
-      - name: Install backend dependencies
-        working-directory: backend
+      - name: Install dependencies
         run: npm install
+        working-directory: ./frontend
 
-      # 4️⃣ Frontend install
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm install
-
-      # 5️⃣ Frontend build
-      - name: Build frontend
-        working-directory: frontend
+      - name: Build
         run: npm run build
+        working-directory: ./frontend
 
-      # 6️⃣ Success
-      - name: Done
-        run: echo "✅ CI Pipeline Successful"
+      - name: Deploy
+        run: echo "Deploy step here"

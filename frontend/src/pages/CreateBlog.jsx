@@ -2,8 +2,8 @@
 import { useState, useRef } from "react";
 
 export default function CreateBlog() {
-  // const [error, setError] = useState("");
-  // const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [error, setError] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const formRef = useRef(null);
 
   const submit = async (e) => {
@@ -42,10 +42,10 @@ export default function CreateBlog() {
     }
   };
 
-  // const deleteDraft = () => {
-  //   formRef.current.reset();
-  //   setShowDeleteConfirm(false);
-  // };
+  const deleteDraft = () => {
+    formRef.current.reset();
+    setShowDeleteConfirm(false);
+  };
 
   return (
     <div className="min-h-screen bg-luxBg flex justify-center px-6 pt-28 pb-32 animate-fadeIn">
