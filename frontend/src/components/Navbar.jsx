@@ -117,6 +117,13 @@ export default function Navbar() {
                   </Link>
 
                   <Link
+                    to="/my-blogs"
+                    className="text-sm text-luxAccent hover:underline"
+                  >
+                    My Blogs
+                  </Link>
+
+                  <Link
                     to="/update-password"
                     className="text-sm text-luxAccent hover:underline"
                   >

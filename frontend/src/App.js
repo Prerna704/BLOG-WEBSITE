@@ -6,6 +6,8 @@ import Register from "./pages/Register";
 import CreateBlog from "./pages/CreateBlog";
 import Profile from "./pages/Profile";
 import UpdatePassword from "./pages/UpdatePassword";
+import MyBlogs from "./pages/MyBlogs";
+import EditBlog from "./pages/EditBlog";
 
 /* 🔐 Protected Route Wrapper */
 function ProtectedRoute({ children }) {
@@ -54,6 +56,28 @@ export default function App() {
             }
           />
         </Routes>
+
+        <Routes>
+          {/* ...existing routes */}
+          <Route
+            path="/my-blogs"
+            element={
+              <ProtectedRoute>
+                <MyBlogs />
+              </ProtectedRoute>
+            }
+          />
+
+           <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute>
+                <EditBlog />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+
       </div>
     </BrowserRouter>
   );

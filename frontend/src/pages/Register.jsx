@@ -58,8 +58,8 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("user", JSON.stringify(data));
-        navigate("/");
+        
+        navigate("/login");
       } else {
         setError(data.message || "Registration failed");
       }

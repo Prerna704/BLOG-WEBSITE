@@ -1,4 +1,118 @@
+// import { useEffect, useState } from "react";
+// import BlogCard from "../components/BlogCard";
+// import BlogModal from "../components/BlogModal";
+// import ExploreTopicsModal from "../components/ExploreTopicsModal";
+
+// export default function Home() {
+//   const [blogs, setBlogs] = useState([]);
+//   const [selectedBlog, setSelectedBlog] = useState(null);
+//   const [showTopics, setShowTopics] = useState(false);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     fetch("http://localhost:5050/api/blogs")
+//       .then(res => {
+//         if (!res.ok) throw new Error("Failed to fetch blogs");
+//         return res.json();
+//       })
+//       .then(data => setBlogs(data))
+//       .catch(err => {
+//         console.error(err);
+//         setError("Could not load blogs");
+//       });
+//   }, []);
+
+//   const scrollToBlogs = () => {
+//     document.getElementById("blogs")?.scrollIntoView({
+//       behavior: "smooth",
+//     });
+//   };
+
+//   return (
+//     <div>
+
+//       {/* HERO */}
+//       <section className="max-w-7xl mx-auto px-10 pt-40 pb-28 animate-fadeIn">
+//         <div className="flex flex-col items-center text-center">
+
+//           <h1 className="text-6xl font-bold leading-tight text-luxHeading max-w-4xl">
+//             Write with intention.
+//             <span className="block text-luxAccent mt-2">
+//               Read with clarity.
+//             </span>
+//           </h1>
+
+//           <p className="mt-6 max-w-2xl text-lg text-luxMuted">
+//             A premium space for ideas that deserve attention.
+//           </p>
+
+//           {/* ACTIONS */}
+//           <div className="mt-10 flex items-center gap-6">
+//             <button
+//               onClick={scrollToBlogs}
+//               className="text-luxAccent font-medium hover:underline transition"
+//             >
+//               Explore stories
+//             </button>
+
+//             <button
+//               onClick={() => setShowTopics(true)}
+//               className="text-luxMuted font-medium hover:text-luxAccent transition"
+//             >
+//               Explore topics
+//             </button>
+//           </div>
+
+//         </div>
+//       </section>
+
+//       {/* SECTION DIVIDER */}
+//       <div className="max-w-7xl mx-auto px-10 mb-12">
+//         <div className="h-px bg-luxBorder/50"></div>
+//       </div>
+
+//       {/* BLOG GRID */}
+//       <section
+//         id="blogs"
+//         className="max-w-7xl mx-auto px-10 pb-28 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
+//       >
+//         {error && (
+//           <p className="col-span-full text-center text-luxMuted">
+//             {error}
+//           </p>
+//         )}
+
+//         {blogs.map((blog) => (
+//           <BlogCard
+//             key={blog._id || blog.title}
+//             blog={blog}
+//             onRead={(b) => setSelectedBlog(b)}
+//           />
+//         ))}
+//       </section>
+
+//       {/* BLOG MODAL — render ONLY when needed */}
+//       {selectedBlog && (
+//         <BlogModal
+//           blog={selectedBlog}
+//           onClose={() => setSelectedBlog(null)}
+//         />
+//       )}
+
+//       {/* EXPLORE TOPICS MODAL — render ONLY when open */}
+//       {showTopics && (
+//         <ExploreTopicsModal
+//           open={showTopics}
+//           onClose={() => setShowTopics(false)}
+//         />
+//       )}
+
+//     </div>
+//   );
+// }
+//********************************************************* */
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BlogCard from "../components/BlogCard";
 import BlogModal from "../components/BlogModal";
 import ExploreTopicsModal from "../components/ExploreTopicsModal";
@@ -8,45 +122,61 @@ export default function Home() {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [showTopics, setShowTopics] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  // Fetch all blogs
   useEffect(() => {
     fetch("http://localhost:5050/api/blogs")
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch blogs");
         return res.json();
       })
-      .then(data => setBlogs(data))
-      .catch(err => {
+      .then((data) => setBlogs(data))
+      .catch((err) => {
         console.error(err);
         setError("Could not load blogs");
       });
   }, []);
 
+  // Scroll to blogs section
   const scrollToBlogs = () => {
     document.getElementById("blogs")?.scrollIntoView({
       behavior: "smooth",
+
     });
+  };
+
+  // Delete blog
+  const handleDelete = async (id) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    try {
+      const res = await fetch(`http://localhost:5050/api/blogs/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ author: user.email }),
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+      setBlogs((prev) => prev.filter((b) => b._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Could not delete blog");
+    }
   };
 
   return (
     <div>
-
       {/* HERO */}
       <section className="max-w-7xl mx-auto px-10 pt-40 pb-28 animate-fadeIn">
         <div className="flex flex-col items-center text-center">
-
           <h1 className="text-6xl font-bold leading-tight text-luxHeading max-w-4xl">
             Write with intention.
-            <span className="block text-luxAccent mt-2">
-              Read with clarity.
-            </span>
+            <span className="block text-luxAccent mt-2">Read with clarity.</span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg text-luxMuted">
             A premium space for ideas that deserve attention.
           </p>
 
-          {/* ACTIONS */}
           <div className="mt-10 flex items-center gap-6">
             <button
               onClick={scrollToBlogs}
@@ -62,7 +192,6 @@ export default function Home() {
               Explore topics
             </button>
           </div>
-
         </div>
       </section>
 
@@ -74,39 +203,39 @@ export default function Home() {
       {/* BLOG GRID */}
       <section
         id="blogs"
+
         className="max-w-7xl mx-auto px-10 pb-28 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
       >
-        {error && (
+        {/* {error && (
           <p className="col-span-full text-center text-luxMuted">
             {error}
           </p>
-        )}
-
+        )} */}
         {blogs.map((blog) => (
           <BlogCard
-            key={blog._id || blog.title}
+            key={blog._id}
             blog={blog}
-            onRead={(b) => setSelectedBlog(b)}
+            isOwner={true}
+            onRead={() => setSelectedBlog(blog)}
+            onEdit={() => navigate(`/edit/${blog._id}`)}
+            onDelete={() => handleDelete(blog._id)}
           />
         ))}
       </section>
 
-      {/* BLOG MODAL — render ONLY when needed */}
+      {/* BLOG MODAL */}
       {selectedBlog && (
-        <BlogModal
-          blog={selectedBlog}
-          onClose={() => setSelectedBlog(null)}
-        />
+        <BlogModal blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
       )}
 
-      {/* EXPLORE TOPICS MODAL — render ONLY when open */}
+      {/* EXPLORE TOPICS MODAL */}
       {showTopics && (
         <ExploreTopicsModal
           open={showTopics}
           onClose={() => setShowTopics(false)}
         />
       )}
-
     </div>
   );
 }
+

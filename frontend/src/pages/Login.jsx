@@ -47,12 +47,14 @@ export default function Login() {
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data));
+        localStorage.setItem("author", data.email);
         navigate("/");
       } else {
         setError(data.message || "Login failed. Check credentials!");
       }
     } catch (err) {
       console.error("Login error:", err);
+      
       setError("Network error! Is your backend running?");
     } finally {
       setLoading(false);
