@@ -60,7 +60,8 @@ export default function EditBlog() {
           value={description}
           onChange={(e) => setDescription(e.target.value)} // ✅ FIX
           rows="6"
-          className="w-full p-3 border"
+          className="w-full p-3 border bg-white-200 text-black"
+          
         />
 
         <input
@@ -68,6 +69,7 @@ export default function EditBlog() {
           value={image}
           onChange={(e) => setImage(e.target.value)} // ✅ FIX
           className="w-full p-3 border"
+          
         />
 
         <button className="bg-blue-600 text-white px-6 py-2 rounded">
