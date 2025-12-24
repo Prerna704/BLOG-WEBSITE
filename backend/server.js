@@ -17,17 +17,17 @@ app.use("/api/blogs", require("./routes/blogRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 
 async function startServer() {
-  // 1️⃣ Connect DB first
+  // Connect DB first
   await connectDB();
 
-  // 2️⃣ Insert mock data only once
+  // Insert mock data only once
   const count = await Blog.countDocuments();
   if (count === 0) {
     await Blog.insertMany(mockBlogs);
     console.log("✅ Mock blogs inserted");
   }
 
-  // 3️⃣ Start server
+  // Start server
   app.listen(5050, () => {
     console.log("🚀 Server running on port 5050");
   });

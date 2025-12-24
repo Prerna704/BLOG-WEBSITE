@@ -9,6 +9,8 @@ export default function CreateBlog() {
   const submit = async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target));
+    console.log("SUBMIT CLICKED");
+
 
     if (!data.title || data.title.trim().length < 5) {
       setError("Title must be at least 5 characters long.");

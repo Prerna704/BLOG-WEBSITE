@@ -2,7 +2,7 @@ const express = require("express");
 const User = require("../models/User");
 const router = express.Router();
 
-/* 🔐 REGISTER */
+/*REGISTER */
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -50,7 +50,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/* 🔐 LOGIN */
+/* LOGIN */
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/* 🔐 UPDATE PASSWORD */
+/* UPDATE PASSWORD */
 router.post("/update-password", async (req, res) => {
   try {
     const { email, oldPassword, newPassword } = req.body;
